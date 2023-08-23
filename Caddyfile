@@ -1,0 +1,29 @@
+noname.to {
+	header Server "Drive IT Hackathon"
+
+	root * /var/www/html/dist
+
+	encode gzip
+
+	try_files {path} /index.html
+	file_server
+}
+
+api.noname.to {
+	header Server "Drive IT Hackathon"
+	reverse_proxy http://localhost:8000 {
+		header_up Host {upstream_hostport}
+		header_up Connection Upgrade
+		header_up Upgrade websocket
+	}
+	handle_errors {
+		@502 expression `{err.status_code} == 502`
+		handle @502 {
+			header Content-Type application/json
+			respond ` {
+				"code": "SERVER_MAINTENANCE",
+				"message": "На сервере проходит техническое обслуживание. Пожалуйста, подождите"
+			}			`
+		}
+	}
+}

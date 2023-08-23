@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://root:bestsecure@localhost:5432/driveit?schema=public"
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  login    String
+  password String
+
+  firstName String
+  lastName  String
+}
