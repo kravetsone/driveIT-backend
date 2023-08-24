@@ -1,5 +1,7 @@
 import fs from "fs/promises";
+import { prisma } from "@db";
 import { GTFSFiles } from "@types";
+import csv from "csvtojson";
 import { WebsocketManager } from "services/gtfs-rt";
 import unzipper from "unzipper";
 import WebSocket from "ws";
@@ -20,8 +22,23 @@ ws.on("message", async (data) => {
         const directory = await unzipper.Open.buffer(data);
         console.log("directory", directory);
 
-        directory.files.forEach((file) => {
-            if (file.path === GTFSFiles.AGENCY) console.log("aggency");
+        directory.files.forEach(async (file) => {
+            const data = await csv({
+                checkType: true,
+                flatKeys: true,
+                ignoreEmpty: true,
+            }).fromString(file.buffer.toString());
+            console.log(data);
+
+            if (file.path === GTFSFiles.AGENCY) {
+                // await prisma.agency.deleteAndCreateMany({ data: [] });
+            } else if (file.path === GTFSFiles.CALENDAR) {
+                // await prisma.calendar.deleteAndCreateMany({data: []})
+            } else if (file.path === GTFSFiles.STOPS) {
+                // await prisma.stop.deleteAndCreateMany({data: []})
+            } else if (file.path === GTFSFiles.ROUTES) {
+                // await prisma.route.deleteAndCreateMany({data: []})
+            }
         });
         return;
     }

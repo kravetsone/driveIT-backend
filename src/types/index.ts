@@ -51,4 +51,7 @@ export type TRoute = (fastify: FastifyZodInstance) => unknown;
 
 export enum GTFSFiles {
     AGENCY = "agency.txt",
+    CALENDAR = "calendar.txt",
+    ROUTES = "routes.txt",
+    STOPS = "stops.txt",
 }
