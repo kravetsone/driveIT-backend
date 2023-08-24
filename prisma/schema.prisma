@@ -27,41 +27,62 @@ enum UserRole {
 //GTFS
 
 model Agency {
-  agency_id       String @id @unique
-  agency_name     String
-  agency_url      String
-  agency_timezone String
-  agency_lang     String
+  id       String @id @unique
+  name     String
+  url      String
+  timezone String
+  lang     String
 }
 
 model Stop {
-  stop_id        String  @id @unique
-  stop_name      String
-  stop_lat       Float
-  stop_lon       Float
-  loaction_type  Int
-  parent_station String?
-  platform_code  String
+  id            String  @id @unique
+  name          String
+  lat           Float
+  lon           Float
+  locationType  Int
+  parentStation String?
+  platformCode  String?
 }
 
 model Route {
-  route_id         Int    @id @unique
-  agency_id        String
-  route_short_name String
-  route_long_name  String
-  route_type       Int
-  route_url        String
+  id        Int    @id @unique
+  agencyId  String
+  shortName String
+  longName  String
+  type      Int
+  url       String
 }
 
 model Calendar {
-  service_id String  @id @unique
-  monday     Int
-  tuesday    Boolean
-  wednesday  Boolean
-  thursday   Boolean
-  friday     Boolean
-  saturday   Boolean
-  sunday     Boolean
-  start_date Int
-  end_date   Int
+  id Int @id @default(autoincrement())
+
+  serviceId   String
+  isMonday    Boolean
+  isTuesday   Boolean
+  isWednesday Boolean
+  isThursday  Boolean
+  isFriday    Boolean
+  isSaturday  Boolean
+  isSunday    Boolean
+  startDate   Int
+  endDate     Int
+}
+
+model StopTime {
+  id Int @id @default(autoincrement())
+
+  tripId        Int
+  arrivalTime   String
+  departureTime String
+  stopId        String
+  stopSequence  Int
+  stopHeadsign  String
+}
+
+model Trip {
+  id Int @id @default(autoincrement())
+
+  routeId   Int
+  serviceId String
+  tripId    Int
 }

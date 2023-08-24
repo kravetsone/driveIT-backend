@@ -15,7 +15,7 @@ const response = userSchema
     .describe("Модель пользователя");
 
 export const schema = {
-    description: "Авторизация в системе",
+    description: "Получение пользователя",
     tags: ["admin"],
     params,
     security: [{ bearerAuth: [] }],

@@ -1,7 +1,7 @@
-import { userSchema } from "@helpers";
 import z from "zod";
 
 const querystring = z.object({
+    query: z.string().default(""),
     page: z.string().transform(Number).refine(Boolean),
     pageSize: z.string().transform(Number).refine(Boolean),
 });
@@ -15,21 +15,19 @@ const response = z
     .object({
         pageCount: z.number(),
         items: z.array(
-            userSchema
-                .pick({
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                    role: true,
-                })
-                .merge(z.object({ login: z.string() })),
+            z.object({
+                id: z.string(),
+                name: z.string(),
+                lat: z.number(),
+                lon: z.number(),
+            }),
         ),
     })
-    .describe("Список пользователй");
+    .describe("Список остановок");
 
 export const schema = {
-    description: "Получение списка пользователей администратором",
-    tags: ["admin"],
+    description: "Получение списка остановок",
+    tags: ["stop"],
     security: [{ bearerAuth: [] }],
     querystring,
     response: {

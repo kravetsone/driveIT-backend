@@ -19,10 +19,10 @@ const userNotExists = z.object({
 
 const response = userSchema
     .pick({ id: true, firstName: true, lastName: true })
-    .describe("Сообщение о том что пользователь успешно удалён");
+    .describe("Модель обновлённого пользователя");
 
 export const schema = {
-    description: "Удаление пользователя администратором",
+    description: "Обновление пользователя администратором",
     tags: ["admin"],
     body,
     security: [{ bearerAuth: [] }],

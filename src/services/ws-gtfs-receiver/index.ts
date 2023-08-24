@@ -1,6 +1,14 @@
 import fs from "fs/promises";
 import { prisma } from "@db";
-import { GTFSFiles } from "@types";
+import {
+    GTFSFiles,
+    IAgencyDataGTFS,
+    ICalendarDataGTFS,
+    IRouteDataGTFS,
+    IStopDataGTFS,
+    IStopTimeDataGTFS,
+    ITripDataGTFS,
+} from "@types";
 import csv from "csvtojson";
 import { WebsocketManager } from "services/gtfs-rt";
 import unzipper from "unzipper";
@@ -31,15 +39,89 @@ ws.on("message", async (data) => {
             console.log(data);
 
             if (file.path === GTFSFiles.AGENCY) {
-                // await prisma.agency.deleteAndCreateMany({ data: [] });
+                const agencyData = data as IAgencyDataGTFS[];
+
+                await prisma.agency.deleteAndCreateMany({
+                    data: agencyData.map((data) => ({
+                        id: data.agency_id,
+                        name: data.agency_name,
+                        url: data.agency_url,
+                        timezone: data.agency_timezone,
+                        lang: data.agency_lang,
+                    })),
+                });
             } else if (file.path === GTFSFiles.CALENDAR) {
-                // await prisma.calendar.deleteAndCreateMany({data: []})
+                const calendarData = data as ICalendarDataGTFS[];
+
+                await prisma.calendar.deleteAndCreateMany({
+                    data: calendarData.map((data) => ({
+                        serviceId: data.service_id,
+                        isMonday: !!data.monday,
+                        isTuesday: !!data.tuesday,
+                        isThursday: !!data.thursday,
+                        isSaturday: !!data.saturday,
+                        isFriday: !!data.friday,
+                        isSunday: !!data.sunday,
+                        isWednesday: !!data.wednesday,
+                        startDate: data.start_date,
+                        endDate: data.end_date,
+                    })),
+                });
             } else if (file.path === GTFSFiles.STOPS) {
-                // await prisma.stop.deleteAndCreateMany({data: []})
+                const stopsData = data as IStopDataGTFS[];
+
+                await prisma.stop.deleteAndCreateMany({
+                    data: stopsData.map((data) => ({
+                        id: String(data.stop_id),
+                        name: data.stop_name,
+                        lat: data.stop_lat,
+                        lon: data.stop_lon,
+                        locationType: data.location_type,
+                        parentStation: data.parent_station
+                            ? String(data.parent_station)
+                            : null,
+                        platformCode: data.platform_code,
+                    })),
+                });
             } else if (file.path === GTFSFiles.ROUTES) {
-                // await prisma.route.deleteAndCreateMany({data: []})
+                const routesData = data as IRouteDataGTFS[];
+
+                await prisma.route.deleteAndCreateMany({
+                    data: routesData.map((data) => ({
+                        id: data.route_id,
+                        agencyId: data.agency_id,
+                        shortName: String(data.route_short_name),
+                        longName: data.route_long_name,
+                        type: data.route_type,
+                        url: data.route_url,
+                    })),
+                });
+            } else if (file.path === GTFSFiles.STOP_TIMES) {
+                const stopTimesData = data as IStopTimeDataGTFS[];
+
+                await prisma.stopTime.deleteAndCreateMany({
+                    data: stopTimesData.map((data) => ({
+                        tripId: data.trip_id,
+                        arrivalTime: data.arrival_time,
+                        departureTime: data.departure_time,
+                        stopId: data.stop_id,
+                        stopSequence: data.stop_sequence,
+                        stopHeadsign: data.stop_headsign,
+                    })),
+                });
+            } else if (file.path === GTFSFiles.TRIPS) {
+                const tripsData = data as ITripDataGTFS[];
+
+                await prisma.trip.deleteAndCreateMany({
+                    data: tripsData.map((data) => ({
+                        routeId: data.route_id,
+                        serviceId: data.service_id,
+                        tripId: data.trip_id,
+                    })),
+                });
             }
         });
+
         return;
     }
     if (typeof data !== "string")

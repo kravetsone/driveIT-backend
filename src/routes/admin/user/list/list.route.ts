@@ -34,30 +34,6 @@ export const updateUser = async (fastify: FastifyZodInstance) => {
                 pageCount: count,
                 items,
             });
-            return res.status(400).send({
-                code: "Вы дебил",
-                message: "Вам противопоказано пользование этим сервисом.",
-            });
-
-            // const deleteUser = await prisma.user.findFirst({
-            //     where: {
-            //         id,
-            //     },
-            // });
-            // if (!deleteUser)
-            //     return res.status(400).send({
-            //         code: "USER_NOT_EXISTS",
-            //         message: "Этого пользователя не существует",
-            //     });
-
-            // await prisma.user.delete({
-            //     where: {
-            //         id,
-            //     },
-            // });
-            // return res.send({
-            //     message: "Пользователь успешно удалён",
-            // });
         },
     );
 };
