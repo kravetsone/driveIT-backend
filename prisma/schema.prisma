@@ -42,6 +42,8 @@ model Stop {
   locationType  Int
   parentStation String?
   platformCode  String?
+
+  stopTimes StopTime[]
 }
 
 model Route {
@@ -51,12 +53,15 @@ model Route {
   longName  String
   type      Int
   url       String
+
+  trips Trip[]
 }
 
 model Calendar {
   id Int @id @default(autoincrement())
 
-  serviceId   String
+  serviceId String
+
   isMonday    Boolean
   isTuesday   Boolean
   isWednesday Boolean
@@ -64,25 +69,41 @@ model Calendar {
   isFriday    Boolean
   isSaturday  Boolean
   isSunday    Boolean
-  startDate   Int
-  endDate     Int
+
+  startDate Int
+  endDate   Int
 }
 
 model StopTime {
   id Int @id @default(autoincrement())
 
-  tripId        Int
+  trip   Trip @relation(fields: [tripId], references: [id])
+  tripId Int
+
   arrivalTime   String
   departureTime String
-  stopId        String
-  stopSequence  Int
-  stopHeadsign  String
+
+  stop   Stop   @relation(fields: [stopId], references: [id])
+  stopId String
+
+  stopSequence Int
+  stopHeadsign String
 }
 
 model Trip {
   id Int @id @default(autoincrement())
 
+  route     Route  @relation(fields: [routeId], references: [id])
   routeId   Int
   serviceId String
-  tripId    Int
+
+  ships     Ship[]
+  stopTimes StopTime[]
+}
+
+model Ship {
+  id   Int    @id @unique
+  name String
+
+  trips Trip[]
 }

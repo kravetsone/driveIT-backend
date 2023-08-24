@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE "Ship" ADD CONSTRAINT "Ship_tripId_fkey" FOREIGN KEY ("tripId") REFERENCES "Trip"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

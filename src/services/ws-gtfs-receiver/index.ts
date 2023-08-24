@@ -109,6 +109,30 @@ ws.on("message", async (data) => {
                         stopHeadsign: data.stop_headsign,
                     })),
                 });
+                await Promise.all(
+                    stopTimesData.map(async (data) => {
+                        const [id, name] = data.stop_headsign.split("_");
+
+                        await prisma.trip.update({
+                            where: {
+                                id: data.trip_id,
+                            },
+                            data: {
+                                ships: {
+                                    connectOrCreate: {
+                                        where: {
+                                            id: Number(id),
+                                        },
+                                        create: {
+                                            id: Number(id),
+                                            name,
+                                        },
+                                    },
+                                },
+                            },
+                        });
+                    }),
+                );
             } else if (file.path === GTFSFiles.TRIPS) {
                 const tripsData = data as ITripDataGTFS[];
 
@@ -116,7 +140,7 @@ ws.on("message", async (data) => {
                     data: tripsData.map((data) => ({
                         routeId: data.route_id,
                         serviceId: data.service_id,
-                        tripId: data.trip_id,
+                        id: data.trip_id,
                     })),
                 });
             }
