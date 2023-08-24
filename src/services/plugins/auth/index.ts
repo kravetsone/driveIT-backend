@@ -20,7 +20,10 @@ export function registerAuth(
 
             if (getUser) {
                 req.user = await prisma.user.findUnique({
-                    where: { id: req.jwtUser.id },
+                    where: {
+                        id: req.jwtUser.id,
+                        password: req.jwtUser.password,
+                    },
                 });
 
                 if (!req.user)

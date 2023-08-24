@@ -12,6 +12,7 @@ export const get = async (fastify: FastifyZodInstance) => {
             const user = req.user!;
             const token = fastify.jwt.sign({
                 id: user.id,
+                password: user.password,
             });
 
             return res.send({

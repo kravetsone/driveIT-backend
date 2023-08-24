@@ -1,7 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { userModelExtension } from "./extensions";
+import { findManyAndCountExtenstion, userModelExtension } from "./extensions";
 
-const prisma = new PrismaClient().$extends(userModelExtension);
+const prisma = new PrismaClient()
+    .$extends(userModelExtension)
+    .$extends(findManyAndCountExtenstion);
 
 export * from "@prisma/client";
 export { prisma };
