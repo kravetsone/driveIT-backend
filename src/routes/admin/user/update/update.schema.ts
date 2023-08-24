@@ -1,4 +1,5 @@
 import { userSchema } from "@helpers";
+import { UserRole } from "@prisma/client";
 import z from "zod";
 
 const body = z
@@ -7,6 +8,7 @@ const body = z
         firstName: z.string().optional(),
         lastName: z.string().optional(),
         password: z.string().optional(),
+        role: z.nativeEnum(UserRole),
     })
     .describe("Данные для обновления");
 
@@ -16,7 +18,7 @@ const userNotExists = z.object({
 });
 
 const response = userSchema
-    .pick({ firstName: true, lastName: true })
+    .pick({ id: true, firstName: true, lastName: true })
     .describe("Сообщение о том что пользователь успешно удалён");
 
 export const schema = {

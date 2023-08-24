@@ -13,7 +13,7 @@ async function registerGtfsRT(fastify: FastifyZodInstance) {
         { websocket: true, schema: { hide: true } },
         (connection) => {
             WebsocketManager.add(connection);
-            connection.socket.on("message", (message) => {
+            connection.socket.on("message", () => {
                 WebsocketManager.broadcastGTFS({ entity: [{ id: "2" }] });
             });
         },

@@ -1,9 +1,8 @@
-import { userSchema } from "@helpers";
 import z from "zod";
 
-const body = z
+const params = z
     .object({
-        id: z.number(),
+        userId: z.string().transform(Number).refine(Boolean),
     })
     .describe("Айди пользователя");
 
@@ -21,7 +20,7 @@ const response = z
 export const schema = {
     description: "Удаление пользователя администратором",
     tags: ["admin"],
-    body,
+    params,
     security: [{ bearerAuth: [] }],
     response: {
         200: response,

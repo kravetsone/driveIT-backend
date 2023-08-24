@@ -2,10 +2,10 @@ import { userSchema } from "@helpers";
 import z from "zod";
 
 const body = z.object({
-    login: z.string(),
+    login: z.string().trim(),
     password: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().trim(),
+    lastName: z.string().trim(),
 });
 
 const userNotExists = z.object({

@@ -10,6 +10,7 @@ module.exports = configure({
             "unicorn/explicit-length-check": "off",
             "@typescript-eslint/no-unnecessary-condition": "off", // Bug???
             "comma-dangle": "off",
+            "unicorn/no-abusive-eslint-disable": "off",
         },
     },
     presets: [

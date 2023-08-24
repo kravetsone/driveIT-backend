@@ -1,6 +1,5 @@
 import { config } from "@config";
 import { prisma } from "@db";
-import { UserRole } from "@prisma/client";
 import { FastifyZodInstance } from "@types";
 import bcrypt from "bcrypt";
 import { schema } from "./update.schema";
@@ -30,6 +29,7 @@ export const updateUser = async (fastify: FastifyZodInstance) => {
                 },
             });
             return res.send({
+                id: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
             });

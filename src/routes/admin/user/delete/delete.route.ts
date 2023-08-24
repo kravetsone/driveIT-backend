@@ -1,4 +1,3 @@
-import { config } from "@config";
 import { prisma } from "@db";
 import { UserRole } from "@prisma/client";
 import { FastifyZodInstance } from "@types";
@@ -6,13 +5,13 @@ import { schema } from "./delete.schema";
 
 export const createUser = async (fastify: FastifyZodInstance) => {
     fastify.delete(
-        "/admin/user/delete",
+        "/admin/user/:userId/delete",
         {
             schema,
             preHandler: fastify.auth(true),
         },
         async (req, res) => {
-            const { id } = req.body;
+            const { userId } = req.params;
 
             const user = req.user!;
             if (user.role !== UserRole.ADMIN)
@@ -23,7 +22,7 @@ export const createUser = async (fastify: FastifyZodInstance) => {
 
             const deleteUser = await prisma.user.findFirst({
                 where: {
-                    id,
+                    id: userId,
                 },
             });
             if (!deleteUser)
@@ -34,7 +33,7 @@ export const createUser = async (fastify: FastifyZodInstance) => {
 
             await prisma.user.delete({
                 where: {
-                    id,
+                    id: userId,
                 },
             });
             return res.send({

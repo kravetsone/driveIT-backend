@@ -1,4 +1,3 @@
-import { config } from "@config";
 import { prisma } from "@db";
 import { UserRole } from "@prisma/client";
 import { FastifyZodInstance } from "@types";

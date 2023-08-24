@@ -32,7 +32,7 @@ declare module "@fastify/jwt" {
     }
 }
 declare module "fastify" {
-    interface PassportUser extends User { }
+    interface PassportUser extends User {}
 
     interface FastifyInstance {
         auth: (
@@ -44,7 +44,7 @@ declare module "fastify" {
         file?: File;
     }
 
-    interface FastifyError extends ZodError { }
+    interface FastifyError extends ZodError {}
 }
 
 export type TRoute = (fastify: FastifyZodInstance) => unknown;
