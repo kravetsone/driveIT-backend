@@ -1,19 +1,27 @@
-import { prisma } from "@db";
+import { prisma, UserRole } from "@db";
 import { FastifyZodInstance } from "@types";
-import { schema } from "./signIn.shema";
+import { schema } from "./get.schema";
 
 export const get = async (fastify: FastifyZodInstance) => {
-    fastify.post(
-        "/auth/signIn",
+    fastify.get(
+        "/admin/user/:userId",
         {
             schema,
+            preHandler: fastify.auth(true),
         },
         async (req, res) => {
-            const { login, password } = req.body;
+            const { userId } = req.params;
 
-            const user = await prisma.user.signIn({
-                login,
-                password,
+            if (req.user!.role !== UserRole.ADMIN)
+                return res.status(400).send({
+                    code: "NO_RIGHTS",
+                    message: "У вас нет прав на получение юзера.",
+                });
+
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: userId,
+                },
             });
             if (!user)
                 return res.status(401).send({
@@ -21,17 +29,11 @@ export const get = async (fastify: FastifyZodInstance) => {
                     message: "Введённые вами логин или пароль неверны",
                 });
 
-            const token = fastify.jwt.sign({
-                id: user.id,
-                password: user.password,
-            });
-
             return res.send({
                 id: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 role: user.role,
-                token,
             });
         },
     );
