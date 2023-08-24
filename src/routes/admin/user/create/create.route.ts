@@ -22,6 +22,17 @@ export const createUser = async (fastify: FastifyZodInstance) => {
                     message: "У вас нет прав на создание аккаунта.",
                 });
 
+            const uniqueLogin = await prisma.user.findFirst({
+                where: {
+                    login,
+                },
+            });
+            if (uniqueLogin)
+                return res.status(400).send({
+                    code: "LOGIN_EXISTS",
+                    message: "Этот логин уже занят",
+                });
+
             const newUser = await prisma.user.create({
                 data: {
                     login,
