@@ -29,6 +29,7 @@ export const get = async (fastify: FastifyZodInstance) => {
                 id: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                role: user.role,
                 token,
             });
         },

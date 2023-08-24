@@ -13,8 +13,6 @@ api.noname.to {
 	header Server "Drive IT Hackathon"
 	reverse_proxy http://localhost:8000 {
 		header_up Host {upstream_hostport}
-		header_up Connection Upgrade
-		header_up Upgrade websocket
 	}
 	handle_errors {
 		@502 expression `{err.status_code} == 502`

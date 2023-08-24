@@ -15,4 +15,35 @@ model User {
 
   firstName String
   lastName  String
+
+  role UserRole @default(USER)
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+//GTFS
+
+model Agency {
+  id Int @id @default(autoincrement())
+
+  agency_id       String @unique
+  agency_name     String
+  agency_url      String
+  agency_timezone String
+  agency_lang     String
+}
+
+model Stop {
+  id Int @id @default(autoincrement())
+
+  stop_id        String  @unique
+  stop_name      String
+  stop_lat       Float
+  stop_lon       Float
+  loaction_type  Int
+  parent_station String?
+  platform_code  String
 }

@@ -48,3 +48,7 @@ declare module "fastify" {
 }
 
 export type TRoute = (fastify: FastifyZodInstance) => unknown;
+
+export enum GTFSFiles {
+    AGENCY = "agency.txt",
+}

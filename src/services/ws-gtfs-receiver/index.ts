@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import { GTFSFiles } from "@types";
 import { WebsocketManager } from "services/gtfs-rt";
 import unzipper from "unzipper";
 import WebSocket from "ws";
@@ -18,12 +19,17 @@ ws.on("message", async (data) => {
         fs.writeFile(process.cwd() + "/gtfs.zip", data);
         const directory = await unzipper.Open.buffer(data);
         console.log("directory", directory);
+
+        directory.files.forEach((file) => {
+            if (file.path === GTFSFiles.AGENCY) console.log("aggency");
+        });
         return;
     }
     if (typeof data !== "string")
         return console.error("[WS-GTFS-RECEIVER] Ни буфер ни строка...");
 
     const gtfsData = JSON.parse(data);
+    console.log(gtfsData);
 
     WebsocketManager.broadcastGTFS({ entity: [{ id: "2" }] });
 });
