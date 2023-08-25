@@ -12,6 +12,16 @@ export const getRoute = async (fastify: FastifyZodInstance) => {
         async (req, res) => {
             const { stopId } = req.params;
 
+            const stop = await prisma.stop.findFirst({
+                where: {
+                    id: String(stopId),
+                },
+            });
+            if (!stop)
+                return res.status(400).send({
+                    code: "STOP_NOT_EXISTS",
+                    message: "Остановка не существует",
+                });
             const schedule = await prisma.stopTime.findMany({
                 where: {
                     stopId: {
@@ -36,12 +46,14 @@ export const getRoute = async (fastify: FastifyZodInstance) => {
             ];
 
             return res.send({
+                name: stop.name,
                 routes: routesShortNames,
                 schedule: schedule.map((data) => ({
                     id: data.id,
                     time: data.arrivalTime.split(":").slice(0, 2).join(":"),
                     routeName: data.trip.route.shortName,
                     tripId: data.tripId,
+                    shipName: data.stopHeadsign.split("_").at(1)!,
                 })),
             });
         },

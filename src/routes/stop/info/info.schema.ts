@@ -11,6 +11,7 @@ const userNotExists = z.object({
 
 const response = z
     .object({
+        name: z.string(),
         routes: z.array(z.string()),
         schedule: z.array(
             z.object({
@@ -18,6 +19,7 @@ const response = z
                 time: z.string(),
                 routeName: z.string(),
                 tripId: z.number(),
+                shipName: z.string(),
             }),
         ),
     })
