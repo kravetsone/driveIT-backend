@@ -7,7 +7,7 @@ import {
     validatorCompiler,
     ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { registerPlugin } from "services/plugins";
+import { registerPlugin } from "services";
 import { ZodAny } from "zod";
 
 const fastify = Fastify({

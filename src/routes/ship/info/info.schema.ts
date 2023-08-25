@@ -25,7 +25,7 @@ const response = z
 
 export const schema = {
     description: "Получение корабля и его расписания",
-    tags: ["route"],
+    tags: ["ship"],
     security: [{ bearerAuth: [] }],
     params,
     response: {
