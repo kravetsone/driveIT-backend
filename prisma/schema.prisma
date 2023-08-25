@@ -77,13 +77,13 @@ model Calendar {
 model StopTime {
   id Int @id @default(autoincrement())
 
-  trip   Trip @relation(fields: [tripId], references: [id])
+  trip   Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
   tripId Int
 
   arrivalTime   String
   departureTime String
 
-  stop   Stop   @relation(fields: [stopId], references: [id])
+  stop   Stop   @relation(fields: [stopId], references: [id], onDelete: Cascade)
   stopId String
 
   stopSequence Int
@@ -93,7 +93,7 @@ model StopTime {
 model Trip {
   id Int @id @default(autoincrement())
 
-  route     Route  @relation(fields: [routeId], references: [id])
+  route     Route  @relation(fields: [routeId], references: [id], onDelete: Cascade)
   routeId   Int
   serviceId String
 

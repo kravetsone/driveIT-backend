@@ -21,13 +21,6 @@ export const updateUser = async (fastify: FastifyZodInstance) => {
                                 mode: "insensitive",
                             },
                         },
-                        {
-                            NOT: {
-                                name: {
-                                    contains: "_",
-                                },
-                            },
-                        },
                     ],
                 },
                 skip: (+page - 1) * +pageSize,
@@ -41,7 +34,7 @@ export const updateUser = async (fastify: FastifyZodInstance) => {
             });
             return res.send({
                 pageCount: count,
-                items,
+                items: items.filter((item) => !item.id.includes("_")),
             });
         },
     );

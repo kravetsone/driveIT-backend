@@ -2,7 +2,7 @@ import z from "zod";
 
 const querystring = z.object({
     query: z.string().default(""),
-    page: z.string().transform(Number).refine(Boolean).default("0"),
+    page: z.string().transform(Number).refine(Boolean).default("1"),
     pageSize: z.string().transform(Number).refine(Boolean).default("10"),
 });
 

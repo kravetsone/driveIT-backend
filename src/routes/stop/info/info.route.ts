@@ -28,6 +28,7 @@ export const getRoute = async (fastify: FastifyZodInstance) => {
                     },
                 },
             });
+            console.log(schedule);
             const routesShortNames = [
                 ...new Set(
                     schedule.map((stopTime) => stopTime.trip.route.shortName),

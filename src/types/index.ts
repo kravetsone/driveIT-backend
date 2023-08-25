@@ -54,8 +54,9 @@ export enum GTFSFiles {
     CALENDAR = "calendar.txt",
     ROUTES = "routes.txt",
     STOPS = "stops.txt",
-    STOP_TIMES = "stop_time.txt",
+    STOP_TIMES = "stop_times.txt",
     TRIPS = "trips.txt",
+    AMINITY = "amenity.txt",
 }
 
 export interface IStopDataGTFS {
@@ -111,4 +112,22 @@ export interface ITripDataGTFS {
     route_id: number;
     service_id: string;
     trip_id: number;
+}
+
+export interface IShipDataGTFS {
+    ship_id: number;
+    ship_name: string;
+}
+
+export interface IGtfsRTMessage {
+    msg_type: string;
+    data: IGtsfRTData[];
+}
+export interface IGtsfRTData {
+    id: number;
+    cog: number;
+    lat: number;
+    lon: number;
+    sog: number;
+    ts: number;
 }

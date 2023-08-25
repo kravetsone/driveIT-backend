@@ -21,13 +21,6 @@ export const updateUser = async (fastify: FastifyZodInstance) => {
                                 mode: "insensitive",
                             },
                         },
-                        {
-                            NOT: {
-                                name: {
-                                    contains: "_",
-                                },
-                            },
-                        },
                     ],
                 },
                 skip: (+page - 1) * +pageSize,

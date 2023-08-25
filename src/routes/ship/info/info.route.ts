@@ -24,12 +24,7 @@ export const getRoute = async (fastify: FastifyZodInstance) => {
                 });
             const schedule = await prisma.stopTime.findMany({
                 where: {
-                    stopHeadsign: ship.id + ship.name,
-                },
-                select: {
-                    id: true,
-                    arrivalTime: true,
-                    departureTime: true,
+                    stopHeadsign: ship.id + "_" + ship.name,
                 },
                 include: {
                     stop: {
@@ -40,13 +35,15 @@ export const getRoute = async (fastify: FastifyZodInstance) => {
                 },
             });
 
+            console.log(schedule);
+
             return res.send({
                 id: ship.id,
                 name: ship.name,
                 schedule: schedule.map((data) => ({
                     id: data.id,
                     time: data.arrivalTime.split(":").slice(0, 2).join(":"),
-                    stopName: data.stop.name,
+                    stopName: data.stop.name.split("_").at(0)!,
                 })),
             });
         },
